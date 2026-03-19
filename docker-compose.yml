@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  # Database Service Setup
+  ansh_postgres:
+    build: ./database
+    container_name: ansh_db_container
+    restart: always
+    environment:
+      POSTGRES_DB: ansh_db
+      POSTGRES_USER: ansh_db_admin
+      POSTGRES_PASSWORD: SecurePass123
+    volumes:
+      - ansh_db_vol:/var/lib/postgresql/data
+    networks:
+      ansh_custom_net:
+        ipv4_address: 192.168.50.21
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ansh_db_admin"]
+      interval: 10s
+      retries: 5
+
+  # Node API Service Setup
+  ansh_api:
+    build: ./backend
+    container_name: ansh_api_container
+    restart: always
+    environment:
+      DB_HOST: 192.168.50.21
+      POSTGRES_DB: ansh_db
+      POSTGRES_USER: ansh_db_admin
+      POSTGRES_PASSWORD: SecurePass123
+      APP_PORT: 4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      ansh_postgres:
+        condition: service_healthy
+    networks:
+      ansh_custom_net:
+        ipv4_address: 192.168.50.20
+
+volumes:
+  # Named volume for Postgres persistence
+  ansh_db_vol:
+
+networks:
+  # External Macvlan network
+  ansh_custom_net:
+    external: true
