@@ -19,14 +19,14 @@ app.get("/api/health", (req, res) => {
   console.log(`[${new Date().toISOString()}] GET /api/health - Health check requested`);
   res.status(200).json({
     status: "success",
-    message: "Ansh's Node.js API is running smoothly!",
+    message: "Raj's Node.js API is running smoothly!",
     timestamp: new Date().toISOString()
   });
 });
 
 // Original health check logic (kept for fallback)
 app.get("/health", (req, res) => {
-  res.send("Server running - Ansh Pipeline");
+  res.send("Server running - Raj Pipeline");
 });
 
 // Create new user (POST API)
@@ -65,6 +65,6 @@ app.get("/users", async (req, res) => {
 const PORT = process.env.APP_PORT || 4000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`=================================`);
-  console.log(`🚀 Ansh's Server started on port ${PORT}`);
+  console.log(`🚀 Raj's Server started on port ${PORT}`);
   console.log(`=================================`);
 });
